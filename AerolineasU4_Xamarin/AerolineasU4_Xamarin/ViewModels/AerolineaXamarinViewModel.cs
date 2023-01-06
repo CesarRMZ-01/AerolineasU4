@@ -17,7 +17,7 @@ namespace AerolineasU4_Xamarin.ViewModels
         public ObservableCollection<Vuelum> Vuelos { get; set; } = new ObservableCollection<Vuelum>();
 
         public Vuelum Vuelo { get; set; }
-        public string Error { get; set; }
+        public string Error { get; set; } = "";
 
         readonly AerolineasXamarinService service = new AerolineasXamarinService();
 
@@ -127,23 +127,27 @@ namespace AerolineasU4_Xamarin.ViewModels
 
             if (Vuelo != null)
             {
-                if (Vuelo.IdAerolineaU4 == 0)
+                if (Validar())
                 {
-                    Vuelo.Estado = "PROGRAMADO";
+                    if (Vuelo.IdAerolineaU4 == 0)
+                    {
+                        Vuelo.Estado = "PROGRAMADO";
 
-                    if (await service.Insert(Vuelo))
+                        if (await service.Insert(Vuelo))
+                        {
+                            await Application.Current.MainPage.Navigation.PopAsync();
+                        }
+                    }
+                    else
                     {
-                        await Application.Current.MainPage.Navigation.PopAsync();
+                        Vuelo.Estado = "REPROGRAMADO";
+                        if (await service.Update(Vuelo))
+                        {
+                            await Application.Current.MainPage.Navigation.PopAsync();
+                        }
                     }
                 }
-                else
-                {
-                    Vuelo.Estado = "REPROGRAMADO";
-                    if (await service.Update(Vuelo))
-                    {
-                        await Application.Current.MainPage.Navigation.PopAsync();
-                    }
-                }
+                
                 CargarVuelos();
 
                 Actualizar(nameof(Error));
@@ -172,7 +176,27 @@ namespace AerolineasU4_Xamarin.ViewModels
         }
 
 
+        bool Validar()
+        {
+            if (string.IsNullOrWhiteSpace(Vuelo.Destino))
+            {
+                Error += "El destino no puede estar vacio " + "\n";
+            }
+            if (Vuelo.Hora < DateTime.Now.AddMinutes(6))
+            {
+                Error += "Se debe planear el vuelo con 6 minutos de anticipación " + "\n";
+            }
+            if (string.IsNullOrWhiteSpace(Vuelo.Vuelo))
+            {
+                Error += "El codigo de vuelo no puede estar vacio " + "\n";
+            }
+            if (Vuelo.Puerta == null)
+            {
+                Error += "Selecione una puerta de salida " + "\n";
+            }
 
+            return Error == "";
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
