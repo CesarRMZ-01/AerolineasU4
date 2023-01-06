@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AerolineasU4_Xamarin.ViewModels"
+             x:Class="AerolineasU4_Xamarin.Views.AgregarView" BackgroundImageSource="FondoAvion"  x:Name="AgregarVuelo" NavigationPage.HasNavigationBar="False">
+    <ContentPage.BindingContext>
+        <vm:AerolineaXamarinViewModel></vm:AerolineaXamarinViewModel>
+    </ContentPage.BindingContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".2*"/>
+            <RowDefinition Height=".6*"/>
+            <RowDefinition Height=".2*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid BackgroundColor="white" Margin="0,20">
+            <Image Source="titulo" HorizontalOptions="Start" HeightRequest="50"></Image>
+            <Image Source="add" HorizontalOptions="End" HeightRequest="50" Margin="10">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GuardarCommand}"></TapGestureRecognizer>
+                </Image.GestureRecognizers>
+            </Image>
+        </Grid>
+        
+        <Frame Grid.Row="1" HasShadow="True" CornerRadius="20"  BackgroundColor="White" Margin="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label TextColor="Black" FontAttributes="Bold">Codigo de Vuelo:</Label>
+                <Entry MaxLength="10" Text="{Binding Vuelo.Vuelo}" Grid.Row="1" Placeholder="ej. ASF792ND"></Entry>
+
+                <Label TextColor="Black" FontAttributes="Bold" Grid.Column="1" Text="Puerta de salida"/>
+                <Picker Grid.Column="1" Grid.Row="1"  Title="Puerta de salida"  SelectedItem="{Binding Vuelo.Puerta}">
+                    <Picker.Items>
+                        <x:String>T01</x:String>
+                        <x:String>T02</x:String>
+                        <x:String>T03</x:String>
+                        <x:String>T04</x:String>
+                        <x:String>T05</x:String>
+                        <x:String>T06</x:String>
+                        <x:String>T07</x:String>
+                        <x:String>T08</x:String>
+                        <x:String>T09</x:String>
+                        <x:String>T10</x:String>
+                    </Picker.Items>
+                </Picker>
+
+                <StackLayout Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
+                    <Image Source="locate" HeightRequest="40"></Image>
+                    <Entry MaxLength="25" Text="{Binding Vuelo.Destino}" WidthRequest="200"  Placeholder="ej. Nueva York, USA"></Entry>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="2">
+                    <Image Source="calendar"></Image>
+                    <Label TextColor="Black" FontAttributes="Bold" VerticalOptions="Center">Fecha del vuelo</Label>
+                    <DatePicker Date="{Binding Fecha}"></DatePicker>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" Grid.Row="4" Grid.ColumnSpan="2">
+                    <Image Source="time"></Image>
+                    <Label TextColor="Black" FontAttributes="Bold" VerticalOptions="Center">Hora del vuelo</Label>
+                    <TimePicker Time="{Binding Hora}"></TimePicker>
+                </StackLayout>
+                
+            </Grid>
+        </Frame>
+
+        <Label HorizontalOptions="Center" TextColor="Red" Text="{Binding Error}" LineBreakMode="WordWrap" 
+                       HorizontalTextAlignment="Center"  
+                       IsEnabled="False" Grid.Row="2"></Label>
+
+    </Grid>
+</ContentPage>

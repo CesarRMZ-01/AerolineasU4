@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AerolineasU4_Xamarin.ViewModels"
+             x:Class="AerolineasU4_Xamarin.Views.PrincipalView" BackgroundImageSource="FondoAvion" NavigationPage.HasNavigationBar="False">
+    <ContentPage.BindingContext>
+        <vm:AerolineaXamarinViewModel x:Name="AerolineaVuelos"></vm:AerolineaXamarinViewModel>
+    </ContentPage.BindingContext>
+
+<Grid Margin="0,10" HeightRequest="500">
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".2*"></RowDefinition>
+            <RowDefinition Height=".8*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid BackgroundColor="white" Margin="0,20">
+            <Image Source="titulo" HorizontalOptions="Start" HeightRequest="60"></Image>
+            <Image Source="refresh" HorizontalOptions="End" HeightRequest="30" Margin="10">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Source={x:Reference AerolineaVuelos}, Path=ActualizarCommand}" 
+                                         CommandParameter="{Binding .}"></TapGestureRecognizer>
+                </Image.GestureRecognizers>
+            </Image>
+        </Grid>
+        <CollectionView ItemsSource="{Binding Vuelos}" Margin="20,10" Grid.Row="1">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                        <Grid Margin="0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width=".8*"></ColumnDefinition>
+                                <ColumnDefinition Width=".2*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="Label">
+                                <Setter Property="FontSize" Value="Small"></Setter>
+                                <Setter Property="FontAttributes" Value="Bold"></Setter>
+                            </Style>
+                        </Grid.Resources>
+
+                            <Frame Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,3" CornerRadius="10"></Frame>
+                            <Grid Grid.Column="0" Grid.RowSpan="2" Padding="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width=".3*"></ColumnDefinition>
+                                    <ColumnDefinition Width=".7*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                                <Label Text="{Binding Vuelo}" 
+                                       VerticalOptions="Center" HorizontalOptions="Start"
+                                       TextColor="#32b0e6"></Label>
+                                <Label Text="{Binding Puerta}" Grid.Column="1" 
+                                       VerticalOptions="Center" HorizontalOptions="End"
+                                       TextColor="#32b0e6"></Label>
+
+
+                                <StackLayout Orientation="Horizontal"
+                                             Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" >
+                                    <Image Source="calendar"></Image>
+                                    <Label Text="{Binding Hora,StringFormat='{}{0:MM/dd/yy h:mm:tt}'}" 
+                                                       VerticalOptions="Center"></Label>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal"
+                                             Grid.ColumnSpan="2" Grid.Row="2">
+                                    <Image Source="locate"></Image>
+                                    <Label Text="{Binding Destino}" VerticalOptions="Center"></Label>
+                                </StackLayout>
+
+
+                                <Label Text="{Binding Estado}" Grid.Row="3" Grid.ColumnSpan="2"
+                                       VerticalOptions="Center" HorizontalOptions="End" TextColor="Orange"></Label>
+
+                            </Grid>
+
+                        <Image Grid.Column="1" HeightRequest="40" Margin="5"
+                               Source="Edit">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference AerolineaVuelos}, Path=EditarCommand}" 
+                                         CommandParameter="{Binding .}"></TapGestureRecognizer>
+                            </Image.GestureRecognizers>
+                        </Image>
+                            
+                        <Image Grid.Column="1" Grid.Row="1" HeightRequest="40" Margin="5"
+                               Source="cancel">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference AerolineaVuelos}, Path=CancelarVueloCommand}" 
+                                                        CommandParameter="{Binding .}"></TapGestureRecognizer>
+                            </Image.GestureRecognizers>
+                        </Image>
+                        </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button Text="+" TextColor="white"
+                FontSize="30"
+                Grid.Row="1" CornerRadius="30" 
+                HeightRequest="70" WidthRequest="70"
+                VerticalOptions="End" HorizontalOptions="End"
+                Margin="20" BackgroundColor="#38ac49"
+                Command="{Binding AgregarCommand}"></Button>
+
+    </Grid>
+</ContentPage>
